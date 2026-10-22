@@ -1,0 +1,45 @@
+
+services:
+  pg-database:
+    image: postgres:17-alpine
+    container_name: pg-database
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pg@1234
+      - POSTGRES_DB=inventorydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data    
+    networks:
+      - inventory-cart-network 
+
+  
+  inventory:
+    # image: codewoksak/inventory:v1
+    image: inventory:v1
+    container_name: inventory
+    ports:
+      - "8083:8083"
+    environment:
+      - PG_HOST=pg-database
+      - PG_PORT=5432
+      - PG_DB=inventorydb
+      - PG_USER=postgres
+      - PG_PASS=pg@1234
+      - RABBIT_HOST=inventory-broker
+      - RABBIT_Q=inventory-queue
+      - RABBIT_EXCHANGE=fanout.ordering
+      - RABBIT_ROUTE_KEY=ordering
+      - RABBIT_USER=guest
+      - RABBIT_PASS=guest
+
+    depends_on:
+      - pg-database
+      - inventory-broker
+    networks:
+      - inventory-cart-network  
+
+volumes:
+  pg_data:
+    external: true

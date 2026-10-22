@@ -1,0 +1,12 @@
+
+include:
+  - rabbitmq-container.yaml
+  - inventory-catalog.yaml
+  - inventory-cart-redis-rabbit.yaml
+  - inventory.yaml
+  - inventory-gateway.yaml
+  - inventory-order.yaml
+  
+networks:
+  inventory-cart-network:
+    driver: bridge        

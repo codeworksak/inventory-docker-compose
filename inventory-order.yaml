@@ -1,0 +1,38 @@
+
+services:
+  mongo-order:
+    image: mongo:7
+    container_name: mongo-order
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db  
+    networks:
+      - inventory-cart-network
+  
+  inventory-order:
+    # image: codewoksak/inventory-order:v1
+    image: inventory-order:v1
+    container_name: inventory-order
+    ports:
+      - "8084:8084"
+    environment:
+      - MONGO_HOST=mongo-order
+      - MONGO_PORT=27017
+      - MONGO_DB=orders_db
+      - RABBIT_HOST=inventory-broker
+      - RABBIT_PORT=5672
+      - RABBIT_Q=order-queue
+      - RABBIT_EXCHANGE=fanout.ordering
+      - RABBIT_ROUTE_KEY=ordering
+      - RABBIT_USER=guest
+      - RABBIT_PASS=guest
+
+    depends_on:
+      - mongo-order
+      - inventory-broker
+    networks:
+      - inventory-cart-network
+      
+volumes:
+  mongodata:      

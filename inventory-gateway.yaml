@@ -1,0 +1,15 @@
+
+services:
+  inventory-gateway-service:
+    #image: codewoksak/inventory-gateway:v1
+    image: inventory-gateway:v1
+    container_name: inventory-gateway
+    environment:
+      - CATALOG_ROUTE=inventory-catalog
+      - CART_ROUTE=inventory-cart
+      - ORDER_ROUTE=inventory-order
+      - INVENTORY_ROUTE=inventory
+    ports:
+      - "8085:8085"
+    networks:
+      - inventory-cart-network

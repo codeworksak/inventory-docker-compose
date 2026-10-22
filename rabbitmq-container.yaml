@@ -1,0 +1,10 @@
+
+services:
+  inventory-broker:
+    image: rabbitmq:4-management
+    container_name: inventory-broker
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - inventory-cart-network

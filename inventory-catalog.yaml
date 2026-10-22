@@ -1,0 +1,10 @@
+
+services:
+  inventory-catalog:
+    #image: codewoksak/inventory-catalog:v1
+    image: inventory-catalog:v1
+    container_name: inventory-catalog
+    ports:
+      - "8081:8081"
+    networks:
+      - inventory-cart-network
